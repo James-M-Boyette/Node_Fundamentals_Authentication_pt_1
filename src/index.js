@@ -57,7 +57,7 @@ async function startApp(){
         app.get('/test', {}, async (request, reply) => {
             try {
                 // "Verify user login"
-                const user = await getUserFromCookies(request);
+                const user = await getUserFromCookies(request, reply);
                 // "Return user email *if* it exists; else return 'unauthorized'"
                 // console.log(request.headers['user-agent']);
                 if(user?._id) {

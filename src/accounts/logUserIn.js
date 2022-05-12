@@ -17,7 +17,7 @@ export async function logUserIn(userId, request, reply) {
     console.log('sessionToken:', sessionToken)
     // "Create JWT"
     const { accessToken, refreshToken } = await createTokens(sessionToken, userId)
-    // "Set Cookie"
+    // "Set current date"
     const now = new Date();
     // "Get date, 30 days in the future"
     const refreshExpires = now.setDate(now.getDate() + 30) // 30 day expiration

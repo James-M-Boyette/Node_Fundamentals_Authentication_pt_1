@@ -15,7 +15,8 @@ export async function createTokens(sessionToken, userId) {
         // "Create 'access' token"
             // Session Id, User Id
         const accessToken = jwt.sign({
-            sessionId: sessionToken,
+            // sessionId: sessionToken,
+            sessionToken,
             userId,
         }, JWTSignature)
         // "Return Refresh Token & Access Token"
