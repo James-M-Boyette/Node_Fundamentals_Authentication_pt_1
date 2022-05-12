@@ -31,7 +31,25 @@
 			<button type="submit">Log-in</button>
 		</form>
 
+		<br />
+		<br />
+		<hr />
+		<br />
+
+		<button onclick="logout()">Log-out</button>
+
 		<script>
+			// Log-out
+			async function logout() {
+				try {
+					const res = await fetch("/api/logout", {
+						method: "POST",
+					});
+				} catch (e) {
+					console.error(e);
+				}
+			}
+
 			// Find 'register form' element
 			(() => {
 				// Note: Above '(() => {' is called an "Iffy"

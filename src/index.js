@@ -26,6 +26,7 @@ import { authorizeUser } from "./accounts/authorize.js";
 
 // 
 import { logUserIn } from './accounts/logUserIn.js';
+import { logUserOut } from './accounts/logUserOut.js';
 
 import { getUserFromCookies } from './accounts/user.js';
 
@@ -109,6 +110,18 @@ async function startApp(){
                 }
                 reply.send({
                     data: "Authentication failed ..."
+                })
+            } catch (e) {
+                console.error(e)
+            }
+        })
+
+        // "Logout"
+        app.post('/api/logout', {}, async (request, reply) => {
+            try {
+                await logUserOut(request, reply)
+                reply.send({
+                    data: "User logged out",
                 })
             } catch (e) {
                 console.error(e)
