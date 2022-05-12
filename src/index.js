@@ -43,6 +43,11 @@ async function startApp(){
                     request.body.email, 
                     request.body.password
                     );
+                    // Generate auth tokens
+
+                    // Set cookies
+
+                    // 
             } catch (e) {
                 console.error(e)
             }
@@ -67,7 +72,6 @@ async function startApp(){
         
         // "Start Server"
         await app.listen(port)
-
         console.log(`🚀 Server Listening at port: ${port}`)
         
     } catch (e) {
