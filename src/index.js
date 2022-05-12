@@ -16,7 +16,10 @@ import fastifyStatic from "@fastify/static";
 import path from "path";
 import { fileURLToPath } from "url";
 
+// "Database connection"
 import { connectDB } from "./db.js"
+
+import { registerUser } from "./accounts/register.js"; 
 
 // "ESM-specific syntax requirements for accessing static files"
 const __filename = fileURLToPath(import.meta.url) // get metadata about files
@@ -36,12 +39,26 @@ async function startApp(){
             root: path.join(__dirname, "public"),
         })
 
-        // "Routes (Overriding)"
+        // "Routes"
+        // Note: these override any native routing behavior, so, we've commented-out the basic GET in order to serve the index.html automatically ...
         // app.get('/', {}, (request, reply) => {
         //     reply.send({
         //         data: "Hello World!"
         //     })
         // })
+
+        app.post('/api/register', {}, async (request, reply) => {
+            // console.log('request:', 'email:', request.body.email, 'password:', request.body.password);
+            try {
+                await registerUser(request.body.email, request.body.password);
+            } catch (e) {
+                console.error(e)
+            }
+            
+            reply.send({
+                data: "Hello World!"
+            })
+        })
         
         // "Start Server"
         await app.listen(port)
