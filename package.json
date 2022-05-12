@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/sou7hernsaint/Node_Fundamentals_Authentication#readme",
   "dependencies": {
+    "@fastify/cookie": "^6.0.0",
     "@fastify/static": "^5.0.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.1",

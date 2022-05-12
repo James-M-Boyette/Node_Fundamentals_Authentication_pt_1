@@ -12,7 +12,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 // "Cookie "
-import fastifyCookie from 'fastify-cookie';
+// import fastifyCookie from 'fastify-cookie';
+import fastifyCookie from '@fastify/cookie';
 
 // "Salted user credentials"
 import { registerUser } from "./accounts/register.js"; 
@@ -22,6 +23,9 @@ import { connectDB } from "./db.js"
 
 // "Verify User Credentials"
 import { authorizeUser } from "./accounts/authorize.js";
+
+// 
+import { logUserIn } from './accounts/logUserIn.js';
 
 
 // "ESM-specific syntax requirements for accessing static files"
@@ -76,10 +80,15 @@ async function startApp(){
         app.post('/api/authorize', {}, async (request, reply) => {
             try {
                 console.log('email:', request.body.email, 'password:', request.body.password)
-                const userId = await authorizeUser(
+                const { isAuthorized, userId } = await authorizeUser(
                     request.body.email, 
                     request.body.password
                     );
+
+                if (isAuthorized) {
+                    await logUserIn(userId, request, reply)
+                }
+
                 reply.setCookie('testCookie', 'the value is x', {
                     path: "/",
                     domain: "localhost",

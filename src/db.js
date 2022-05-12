@@ -1,6 +1,3 @@
-// console.log('Hello from db.js');
-// mongodb+srv://James_Boyette:<password>@cluster0.hasg8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-
 import mongo from "mongodb";
 
 const { MongoClient } = mongo;

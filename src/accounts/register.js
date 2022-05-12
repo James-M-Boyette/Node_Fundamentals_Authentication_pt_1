@@ -1,19 +1,19 @@
+// "Store a new user + their credentials" ...
+
 import bcrypt from 'bcryptjs';
 const { genSalt, hash } = bcrypt;
 
-// import { user } from "../user/user.js"; 
-// The above threw an ?order of execution? error for Scott, so he dynamically imported it within the 'registerUser' function
-
 export async function registerUser(email, password) {
-    const { user } = await import("../user/user.js") // Dynamically-importing rather than at the beginning of the file
+    // "Get 'user' collection (from database)"
+    const { user } = await import("../user/user.js")
 
-    // generate salt
+    // "Generate salt"
     const salt = await genSalt(10); // Specifies how long the salt should be
 
-    // hash with salt
+    // "Generate encrypted pw w/ hash + salt"
     const hashedPassword = await hash(password, salt)
 
-    // store in DB
+    // "Store user's email & hashed-pw in DB"
     const result = await user.insertOne({
         email: {
             address: email,
@@ -22,7 +22,7 @@ export async function registerUser(email, password) {
         password: hashedPassword,
     })
 
-    // return user from DB
+    // "Return user from DB"
     return result.insertedId
 
 }
