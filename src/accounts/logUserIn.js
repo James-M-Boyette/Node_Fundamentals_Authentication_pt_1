@@ -19,7 +19,9 @@ export async function logUserIn(userId, request, reply) {
     const { accessToken, refreshToken } = await createTokens(sessionToken, userId)
     // "Set Cookie"
     const now = new Date();
-    const refreshExpires = now.setDate(now.getDate + 30) // 30 day expiration
+    // "Get date, 30 days in the future"
+    const refreshExpires = now.setDate(now.getDate() + 30) // 30 day expiration
+    // "Set Cookies"
     reply.setCookie('refreshToken', refreshToken, {
         path: "/",
         domain: "localhost",

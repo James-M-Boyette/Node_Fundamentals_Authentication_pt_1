@@ -27,6 +27,8 @@ import { authorizeUser } from "./accounts/authorize.js";
 // 
 import { logUserIn } from './accounts/logUserIn.js';
 
+import { getUserFromCookies } from './accounts/user.js';
+
 
 // "ESM-specific syntax requirements for accessing static files"
 const __filename = fileURLToPath(import.meta.url) // get metadata about files
@@ -53,10 +55,23 @@ async function startApp(){
 
         // "Routes"
         app.get('/test', {}, async (request, reply) => {
-            console.log(request.cookies.testCookie),
-            reply.send({
-                data: "Zis is a tEst ..."
-            })
+            try {
+                // "Verify user login"
+                const user = await getUserFromCookies(request);
+                // "Return user email *if* it exists; else return 'unauthorized'"
+                // console.log(request.headers['user-agent']);
+                if(user?._id) {
+                    reply.send({
+                        data: user,
+                    })
+                } else {
+                    reply.send({
+                        data: "User look-up failed ...",
+                    })
+                }
+            } catch (e) {
+                throw new Error(e)
+            }
         })
 
         app.post('/api/register', {}, async (request, reply) => {
