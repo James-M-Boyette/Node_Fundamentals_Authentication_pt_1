@@ -42,6 +42,7 @@ const port = 3000;
 async function startApp(){
     try {
         app.register(fastifyCookie, {
+            // Import Cookie signature
             secret: process.env.COOKIE_SIGNATURE,
         })
 
@@ -87,14 +88,12 @@ async function startApp(){
 
                 if (isAuthorized) {
                     await logUserIn(userId, request, reply)
+                    reply.send({
+                        data: "User logged in succesfully!"
+                    })
                 }
-
-                reply.setCookie('testCookie', 'the value is x', {
-                    path: "/",
-                    domain: "localhost",
-                    httpOnly: true,
-                }).send({
-                    data: "Logged in succesfully!"
+                reply.send({
+                    data: "Authentication failed ..."
                 })
             } catch (e) {
                 console.error(e)
