@@ -17,7 +17,8 @@ import { registerUser } from "./accounts/register.js";
 // "Database connection"
 import { connectDB } from "./db.js"
 
-
+// "Verify User Credentials"
+import { authorizeUser } from "./accounts/authorize.js";
 
 
 // "ESM-specific syntax requirements for accessing static files"
@@ -42,7 +43,20 @@ async function startApp(){
                     request.body.email, 
                     request.body.password
                     );
-                console.log('userId:', userId);
+            } catch (e) {
+                console.error(e)
+            }
+            reply.send({
+                data: "Hello World!"
+            })
+        })
+        app.post('/api/authorize', {}, async (request, reply) => {
+            try {
+                console.log('email:', request.body.email, 'password:', request.body.password)
+                const userId = await authorizeUser(
+                    request.body.email, 
+                    request.body.password
+                    );
             } catch (e) {
                 console.error(e)
             }
