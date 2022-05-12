@@ -11,6 +11,9 @@ import fastifyStatic from "@fastify/static";
 import path from "path";
 import { fileURLToPath } from "url";
 
+// "Cookie "
+import fastifyCookie from 'fastify-cookie';
+
 // "Salted user credentials"
 import { registerUser } from "./accounts/register.js"; 
 
@@ -29,14 +32,28 @@ const __dirname = path.dirname(__filename)
 const app = fastify();
 const port = 3000;
 
+// console.log(process.env.MONGO_URL)
+// console.log(process.env.COOKIE_SIGNATURE)
+
 async function startApp(){
     try {
+        app.register(fastifyCookie, {
+            secret: process.env.COOKIE_SIGNATURE,
+        })
+
         // "Root Directory"
         app.register(fastifyStatic, {
             root: path.join(__dirname, "public"),
         })
 
         // "Routes"
+        app.get('/test', {}, async (request, reply) => {
+            console.log(request.cookies.testCookie),
+            reply.send({
+                data: "Zis is a tEst ..."
+            })
+        })
+
         app.post('/api/register', {}, async (request, reply) => {
             try {
                 const userId = await registerUser(
@@ -55,6 +72,7 @@ async function startApp(){
                 data: "Hello World!"
             })
         })
+
         app.post('/api/authorize', {}, async (request, reply) => {
             try {
                 console.log('email:', request.body.email, 'password:', request.body.password)
@@ -62,12 +80,16 @@ async function startApp(){
                     request.body.email, 
                     request.body.password
                     );
+                reply.setCookie('testCookie', 'the value is x', {
+                    path: "/",
+                    domain: "localhost",
+                    httpOnly: true,
+                }).send({
+                    data: "Logged in succesfully!"
+                })
             } catch (e) {
                 console.error(e)
             }
-            reply.send({
-                data: "Hello World!"
-            })
         })
         
         // "Start Server"
